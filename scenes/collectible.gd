@@ -1,8 +1,9 @@
 extends Area2D
 
+@onready var game_manager = %GameManager
 
 
-func _on_body_entered(body: Node2D) -> void:
+func _on_body_entered(body):
 	if (body.name == "CharacterBody2D"):
 		queue_free()
-	#pass # Replace with function body.
+		game_manager.add_point()
