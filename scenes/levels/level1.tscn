@@ -1,12 +1,15 @@
-[gd_scene load_steps=10 format=3 uid="uid://c30rmu0ly7xe3"]
+[gd_scene load_steps=14 format=3 uid="uid://c30rmu0ly7xe3"]
 
 [ext_resource type="Texture2D" uid="uid://pqqypblgmmch" path="res://Green.png" id="1_xbhvu"]
 [ext_resource type="Texture2D" uid="uid://saea2fgxdnc8" path="res://Terrain (16x16).png" id="2_lhol4"]
 [ext_resource type="PackedScene" uid="uid://d1app4cbb3cf6" path="res://scenes/main_character.tscn" id="3_4e1pn"]
 [ext_resource type="PackedScene" uid="uid://dyhmrfo77qkdg" path="res://scenes/collectible.tscn" id="4_ltshj"]
 [ext_resource type="Script" uid="uid://ba0bo2st1d8af" path="res://game_manager.gd" id="5_2qthq"]
+[ext_resource type="PackedScene" uid="uid://bvvcmsttpuv8p" path="res://scenes/enemy.tscn" id="6_conm7"]
 [ext_resource type="PackedScene" uid="uid://dnm6sl3bp3j7r" path="res://scenes/finish.tscn" id="6_mg1x1"]
-[ext_resource type="PackedScene" uid="uid://choviscx1e2oh" path="res://scenes/level2.tscn" id="7_sjpy3"]
+[ext_resource type="Texture2D" uid="uid://d14scfmihy1ck" path="res://assets/Other/heart.png" id="7_d3jkd"]
+[ext_resource type="PackedScene" uid="uid://choviscx1e2oh" path="res://scenes/levels/level2.tscn" id="7_sjpy3"]
+[ext_resource type="Script" uid="uid://dodjanu3sak0v" path="res://scenes/levels/pause.gd" id="8_5ntmo"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ubp6x"]
 texture = ExtResource("2_lhol4")
@@ -175,11 +178,19 @@ texture = ExtResource("2_lhol4")
 physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_ubp6x")
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nkeig"]
+bg_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
 [node name="Node" type="Node"]
 
-[node name="GameManager" type="Node" parent="."]
+[node name="GameManager" type="Node" parent="." node_paths=PackedStringArray("hearts")]
 unique_name_in_owner = true
 script = ExtResource("5_2qthq")
+hearts = [NodePath("../UI/Hearts/HBoxContainer/Heart"), NodePath("../UI/Hearts/HBoxContainer/Heart2"), NodePath("../UI/Hearts/HBoxContainer/Heart3")]
 
 [node name="Scene Objects" type="Node" parent="."]
 
@@ -234,6 +245,17 @@ position = Vector2(1288, 116)
 [node name="Collectible5" parent="Scene Objects/Collectibles" instance=ExtResource("4_ltshj")]
 position = Vector2(43, 253)
 
+[node name="Enemies" type="Node" parent="Scene Objects"]
+
+[node name="Enemy" parent="Scene Objects/Enemies" instance=ExtResource("6_conm7")]
+position = Vector2(661, 190)
+
+[node name="Enemy3" parent="Scene Objects/Enemies" instance=ExtResource("6_conm7")]
+position = Vector2(2015, 191)
+
+[node name="Enemy2" parent="Scene Objects/Enemies" instance=ExtResource("6_conm7")]
+position = Vector2(1776, 383)
+
 [node name="UI" type="CanvasLayer" parent="."]
 
 [node name="Panel" type="Panel" parent="UI"]
@@ -255,6 +277,110 @@ text = "Points: 0"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="Hearts" type="Panel" parent="UI"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -244.0
+offset_top = 8.0
+offset_right = -9.0
+offset_bottom = 98.0
+grow_horizontal = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/Hearts"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -117.5
+offset_top = -30.0
+offset_right = 117.5
+offset_bottom = 30.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Heart" type="TextureRect" parent="UI/Hearts/HBoxContainer"]
+texture_filter = 1
+layout_mode = 2
+texture = ExtResource("7_d3jkd")
+expand_mode = 2
+
+[node name="Heart2" type="TextureRect" parent="UI/Hearts/HBoxContainer"]
+texture_filter = 1
+layout_mode = 2
+texture = ExtResource("7_d3jkd")
+expand_mode = 2
+
+[node name="Heart3" type="TextureRect" parent="UI/Hearts/HBoxContainer"]
+texture_filter = 1
+layout_mode = 2
+texture = ExtResource("7_d3jkd")
+expand_mode = 2
+
+[node name="Pause" type="Node" parent="UI"]
+script = ExtResource("8_5ntmo")
+
+[node name="PausePanel" type="Panel" parent="UI/Pause"]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="UI/Pause/PausePanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -187.0
+offset_top = -156.0
+offset_right = 195.0
+offset_bottom = -72.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 50
+text = "GAME PAUSED"
+horizontal_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/Pause/PausePanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -203.5
+offset_top = -59.5
+offset_right = 203.5
+offset_bottom = 59.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+
+[node name="Resume" type="Button" parent="UI/Pause/PausePanel/VBoxContainer"]
+process_mode = 3
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+theme_override_styles/normal = SubResource("StyleBoxFlat_nkeig")
+text = "RESUME"
+
+[node name="Return to main menu" type="Button" parent="UI/Pause/PausePanel/VBoxContainer"]
+process_mode = 3
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+theme_override_styles/normal = SubResource("StyleBoxFlat_nkeig")
+text = "GO TO MAIN MENU"
+
 [node name="Finish" parent="." instance=ExtResource("6_mg1x1")]
 position = Vector2(2318, 583)
 target_level = ExtResource("7_sjpy3")
+
+[connection signal="pressed" from="UI/Pause/PausePanel/VBoxContainer/Resume" to="UI/Pause" method="_on_resume_pressed"]
+[connection signal="pressed" from="UI/Pause/PausePanel/VBoxContainer/Return to main menu" to="UI/Pause" method="_on_return_to_main_menu_pressed"]

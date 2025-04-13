@@ -9,6 +9,14 @@ const JUMP_VELOCITY = -900.0
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 
+func jump():
+	velocity.y = JUMP_VELOCITY
+	
+func jump_side(x):
+	velocity.y = JUMP_VELOCITY
+	velocity.x = x 
+	
+
 func _physics_process(delta):
 	if (velocity.x > 1 || velocity.x < -1):
 		sprite_2d.animation = "running"
